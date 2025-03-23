@@ -1,12 +1,57 @@
-# React + Vite
+# Project Name: "FlavorVerse"
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Concept: A platform where users can share their favorite recipes, browse recipes from others, and save recipes they like.
+---
 
-Currently, two official plugins are available:
+# Technology Stack:
+## Frontend:
+### React.js: For building the user interface.
+### React Router: For navigation.
+### Fetch API: For making HTTP requests to the backend.
+### A UI library (Tailwind CSS): For styling and component consistency.
+## Backend:
+### Python with flask
+### JSON Web Tokens (JWT): For user authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+# Message to DEVS
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## - Always make sure you pull before any push, your code will be review by the whole teab before merge.
+## - to run the frontend "React application" navigate to
+
+```
+  frontend > flavorverse
+```
+install packages - run
+```
+  npm install
+```
+then run the app
+```
+  npm run dev
+```
+### the app will open at [http://localhost:5173] (localhost port 5173)
+## make sure you are usig node version >=20.0.06 otherwise react router may not work.
+
+## - to run the backend "Flask application" navigate to
+
+```
+  backend
+```
+install packages - run
+```bash
+  python install requirements.txt
+```
+> Abo please put all libraries needed into requirments.txt for simple installation
+
+then run the app
+```
+  python main.py
+```
+
+**Note** *use python3 if you are on linux*
+
+### the app will open at [http://localhost:5173] (localhost port 5173)
+## make sure you are usig node version >=20.0.06 otherwise react router may not work.
+
