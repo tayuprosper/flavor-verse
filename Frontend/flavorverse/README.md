@@ -5,20 +5,20 @@ Concept: A platform where users can share their favorite recipes, browse recipes
 
 # Technology Stack:
 ## Frontend:
-### React.js: For building the user interface.
-### React Router: For navigation.
-### Fetch API: For making HTTP requests to the backend.
-### A UI library (Tailwind CSS): For styling and component consistency.
+ React.js: For building the user interface.
+React Router: For navigation.
+Fetch API: For making HTTP requests to the backend.
+A UI library (Tailwind CSS): For styling and component consistency.
 ## Backend:
-### Python with flask
+Python with flask
 ### JSON Web Tokens (JWT): For user authentication.
 
 ---
 
 # Message to DEVS
 
-## - Always make sure you pull before any push, your code will be review by the whole teab before merge.
-## - to run the frontend "React application" navigate to
+ - Always make sure you pull before any push, your code will be review by the whole teab before merge.
+ - to run the frontend "React application" navigate to
 
 ```
   frontend > flavorverse
@@ -31,10 +31,10 @@ then run the app
 ```
   npm run dev
 ```
-### the app will open at [http://localhost:5173] (localhost port 5173)
-## make sure you are usig node version >=20.0.06 otherwise react router may not work.
+ the app will open at [http://localhost:5173] (localhost port 5173)
+ make sure you are usig node version >=20.0.06 otherwise react router may not work.
 
-## - to run the backend "Flask application" navigate to
+ - to run the backend "Flask application" navigate to
 
 ```
   backend
@@ -52,6 +52,5 @@ then run the app
 
 **Note** *use python3 if you are on linux*
 
-### the app will open at [http://localhost:5173] (localhost port 5173)
-## make sure you are usig node version >=20.0.06 otherwise react router may not work.
+The app will open at [http://localhost:8080](localhost port 5173)
 
