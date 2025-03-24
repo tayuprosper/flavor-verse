@@ -13,3 +13,16 @@ body{
 .text-important{
   color: #b84A62;
 }
+
+
+label{
+  font-weight: bolder;
+}
+
+input{
+  padding-left: 1em;
+}
+
+input:focus{
+  outline: none;
+}
