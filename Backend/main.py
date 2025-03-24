@@ -56,30 +56,34 @@ class Recipe(db.Model):
         for column in self.__table__.columns:
             recipes[column.name] = getattr(self, column.name)
         return recipes
+    
+@app.route('/', methods=["GET"])
+def index():
+    return "<h1>Welcome to FlavorVerse</h1>"
 
 @app.route('/register', methods=["POST"])
 def register():
-    print(request.data.print)
     user_name = request.args.get('name')
-    # print(user_name)
+
     user_password = request.args.get("password")
-    # print(user_password)
+
     check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
 
-        if check_name:
-            return jsonify({"message": "User already exists"}), 400
-        else:
-            new_user = User(
-                name = user_name,
-                password = generate_password_hash(
+    if check_name:
+        return jsonify({"message": "User already exists"}), 400
+   
+    with app.app_context():
+        new_user = User(
+            name = user_name,
+            password = generate_password_hash(
+
                         user_password,
                         method="pbkdf2:sha256", 
                         salt_length=8
-                    )
-            )
-
-            db.session.add(new_user)
-            db.session.commit()
+                        )
+        )
+        db.session.add(new_user)
+        db.session.commit()
 
         access_token = create_access_token(identity=user_name)
         return jsonify({"access_token": access_token}), 200
@@ -110,7 +114,7 @@ def get_recipes():
         return jsonify({"recipes": [recipe.to_json() for recipe in all_recipes]}), 200
 
 
-@app.route('/get-recipe/<int: recipe_id>', methods=["GET"])
+@app.route('/get-recipe/<int:recipe_id>', methods=["GET"])
 def get_recipe(recipe_id):
     
     with app.app_context():
@@ -139,7 +143,7 @@ def create_recipe():
 
         return jsonify({"message": "recipe successfully created"}), 201
 
-@app.route('/update-recipe/<int: recipe_id>', methods=["PATCH"])
+@app.route('/update-recipe/<int:recipe_id>', methods=["PATCH"])
 @jwt_required()
 def update_recipe(recipe_id):
 
@@ -155,7 +159,7 @@ def update_recipe(recipe_id):
 
 
 
-@app.route('/delete-recipe/<int: recipe_id>', methods=["DELETE"])
+@app.route('/delete-recipe/<int:recipe_id>', methods=["DELETE"])
 @jwt_required()
 def delete_recipe(recipe_id):
 
@@ -186,4 +190,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         
-    app.run(debug=True)
+    app.run(debug=True, port=5005)
