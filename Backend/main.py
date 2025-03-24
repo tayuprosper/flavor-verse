@@ -66,6 +66,7 @@ def register():
     user_name = request.args.get('name')
 
     user_password = request.args.get("password")
+
     check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
 
     if check_name:
@@ -75,6 +76,7 @@ def register():
         new_user = User(
             name = user_name,
             password = generate_password_hash(
+
                         user_password,
                         method="pbkdf2:sha256", 
                         salt_length=8

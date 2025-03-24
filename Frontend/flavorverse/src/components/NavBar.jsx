@@ -1,6 +1,6 @@
 import ButtonPrimary from "../assets/ButtonPrimary";
 import ButtonSecondary from "../assets/ButtonSecondary";
-
+import {Link} from 'react-router-dom'
 const NavBar = ()=>{
     return (
         <div className="navbar flex justify-between items-center my-10 mx-40">
@@ -16,8 +16,8 @@ const NavBar = ()=>{
                </ul>
             </div>
             <div className="user-avatar flex gap-5">
-                    <ButtonPrimary label={"Login"}/>
-                    <ButtonSecondary label={"Sign up"}/>
+                   <Link to={"/login"} ><ButtonPrimary label={"Login"}/></Link>
+                   <Link to={"/signup"} ><ButtonSecondary label={"Sign up"}/></Link>
             </div>
         </div>
     )
