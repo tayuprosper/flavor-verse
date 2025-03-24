@@ -63,14 +63,8 @@ def register():
     user_name = request.args.get('name')
     # print(user_name)
     user_password = request.args.get("password")
-<<<<<<< HEAD
     # print(user_password)
     check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
-=======
-
-    with app.app_context():
-        check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
->>>>>>> b58352940e14b997657bedbdf99f4d24e3cc8519
 
         if check_name:
             return jsonify({"message": "User already exists"}), 400
@@ -87,13 +81,8 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-<<<<<<< HEAD
         access_token = create_access_token(identity=user_name)
         return jsonify({"access_token": access_token}), 200
-=======
-            access_token = create_access_token(identity=user_name)
-            return jsonify({"access_token": access_token})
->>>>>>> b58352940e14b997657bedbdf99f4d24e3cc8519
 
 @app.route('/login', methods=["POST"])
 def login():
