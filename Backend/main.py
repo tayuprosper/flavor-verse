@@ -50,9 +50,11 @@ class Recipe(db.Model):
 
 @app.route('/register', methods=["POST"])
 def register():
-    user_name = request.args.get("name")
+    print(request.data.print)
+    user_name = request.args.get('name')
+    # print(user_name)
     user_password = request.args.get("password")
-
+    # print(user_password)
     check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
 
     if check_name:
@@ -71,7 +73,7 @@ def register():
         db.session.commit()
 
         access_token = create_access_token(identity=user_name)
-        return jsonify({"access_token": access_token})
+        return jsonify({"access_token": access_token}), 200
 
 @app.route('/login', methods=["POST"])
 def login():
