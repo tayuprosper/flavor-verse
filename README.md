@@ -56,5 +56,5 @@ then run the app
 
 **Note** *use python3 if you are on linux*
 
-The app will open at http://localhost:8080
+The app will open at http://localhost:5000
 
