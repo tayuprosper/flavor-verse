@@ -36,6 +36,12 @@ class User(db.Model):
     # Relationship between recipes and user
     savedRecipes = relationship("Recipe", back_populates="user")
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "savedRecipes": [recipe.to_json() for recipe in self.savedRecipes]
+        }
 
 
 class Recipe(db.Model):
@@ -43,7 +49,7 @@ class Recipe(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(50), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    ingredients: Mapped[str] = mapped_column(Text, nullable=False)
+    ingredients: Mapped[str] = mapped_column(Text, nullable=False)  # Keep as a string for simplicity
 
     #Relationship between recipe and user
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
@@ -59,8 +65,9 @@ class Recipe(db.Model):
 
 @app.route('/register', methods=["POST"])
 def register():
-    user_name = request.args.get("name")
-    user_password = request.args.get("password")
+    data = request.json  # Use request.json for POST data
+    user_name = data.get("name")
+    user_password = data.get("password")
 
     with app.app_context():
         check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
@@ -85,8 +92,9 @@ def register():
 
 @app.route('/login', methods=["POST"])
 def login():
-    user_name = request.args.get("name")
-    password = request.args.get("password")
+    data = request.json  # Use request.json for POST data
+    user_name = data.get("name")
+    password = data.get("password")
 
     with app.app_context():
         check_user = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
@@ -109,7 +117,7 @@ def get_recipes():
         return jsonify({"recipes": [recipe.to_json() for recipe in all_recipes]}), 200
 
 
-@app.route('/get-recipe/<int: recipe_id>', methods=["GET"])
+@app.route('/get-recipe/<int:recipe_id>', methods=["GET"])
 def get_recipe(recipe_id):
     
     with app.app_context():
@@ -124,21 +132,19 @@ def get_recipe(recipe_id):
 @app.route('/create-recipe', methods=["POST"])
 @jwt_required()
 def create_recipe():
-    
-    with app.app_context():
-        new_recipe = Recipe(
-            title = request.args.get("title"),
-            description = request.args.get("description"),
-            ingredients = request.args.get("ingredients").split(',') # All Ingredients are converted to a list of ingredients
+    data = request.json  # Use request.json for POST data
+    new_recipe = Recipe(
+        title=data.get("title"),
+        description=data.get("description"),
+        ingredients=data.get("ingredients")  # Store as a string
+    )
 
-        )
+    db.session.add(new_recipe)
+    db.session.commit()  # Fix typo
 
-        db.session.add(new_recipe)
-        db.sesssion.commit()
+    return jsonify({"message": "recipe successfully created"}), 201
 
-        return jsonify({"message": "recipe successfully created"}), 201
-
-@app.route('/update-recipe/<int: recipe_id>', methods=["PATCH"])
+@app.route('/update-recipe/<int:recipe_id>', methods=["PATCH"])
 @jwt_required()
 def update_recipe(recipe_id):
 
@@ -149,18 +155,19 @@ def update_recipe(recipe_id):
         recipe.description = request.args.get("description", recipe.description)
         recipe.ingredients = request.args.get("ingredients", recipe.ingredients)
 
-        db.sesssion.commit()
+        db.session.commit()  # Fix typo
         return jsonify({"message": "recipe successfully updated"}), 201
 
 
 
-@app.route('/delete-recipe/<int: recipe_id>', methods=["DELETE"])
+@app.route('/delete-recipe/<int:recipe_id>', methods=["DELETE"])
 @jwt_required()
 def delete_recipe(recipe_id):
 
     with app.app_context():
         recipe = db.get_or_404(Recipe, recipe_id)
         db.session.delete(recipe)
+        db.session.commit()  # Add missing commit
         return jsonify({"message": "recipe successfully deleted"}), 201
 
 
@@ -173,7 +180,7 @@ def user_profile():
     with app.app_context():
         user = db.session.execute(db.select(User).where(User.name==name)).scalar()
         if user:
-            return jsonify({"message": user.to_json()})
+            return jsonify({"message": user.to_json()})  # Fix serialization
         else:
             return jsonify({
                 "message": "user not found"
