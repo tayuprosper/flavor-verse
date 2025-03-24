@@ -1,7 +1,13 @@
 import ButtonNext from "../assets/ButtonNext";
 import ButtonPrimary from "../assets/ButtonPrimary"
+import { generate_payment_link } from "../payment-test/payment_link_test";
 
 const MainCTA = ()=>{
+
+    const startPay = async ()=>{
+        await generate_payment_link();
+    }
+
     return (
         <div className="cta flex justify-center my-30 mx-40  items-center">
             <div className="text-content">
@@ -17,7 +23,7 @@ const MainCTA = ()=>{
                     </p>
                 </div>
                 <div className="ctabtn">
-                    <ButtonNext label={"Explore Now"}/>
+                    <ButtonNext label={"Explore Now"} onclick={startPay}/>
                 </div>
             </div>
             <div className="side-image w-[100vw] flex justify-center">

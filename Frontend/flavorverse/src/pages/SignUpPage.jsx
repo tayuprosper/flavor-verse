@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonPrimary from "../assets/ButtonPrimary"
 import {validate_form_signup_form } from "../FormUtilities/validateform";
-import { create_user } from "../api/auth";
+import { create_user, getAccessToken } from "../api/auth";
+import { useNavigate } from "react-router-dom";
+
 const SignUpPage = ()=>{
 
-
+    const navigate = useNavigate();
+    useEffect(()=>{
+        const token = getAccessToken();
+        if (token){
+            navigate("/");
+        }
+    },[])
+   
     const [formData ,setFormData] = useState({
         username: '',
         password1: '',
@@ -17,12 +26,12 @@ const SignUpPage = ()=>{
     const handleSubmit = async (e)=>{
         e.preventDefault();
         if (validate_form_signup_form(formData, setFromError)){
-            const res = await create_user(formData, setFormData);
+            const res = await create_user(formData.username, formData.password1, setFormData, setFormData);
             if (!res){
                 return;
             }else{
-                alert("Account creation succeeded");
-                return;
+                localStorage.setItem("accessToken", res.access_token)
+                navigate("/");
             }
         }else{
             // alert("Failure");

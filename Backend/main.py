@@ -63,10 +63,8 @@ def index():
 
 @app.route('/register', methods=["POST"])
 def register():
-    user_name = request.args.get('name')
-
-    user_password = request.args.get("password")
-
+    user_name = request.json.get("name")
+    user_password = request.json.get("password")
     check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
 
     if check_name:
@@ -76,7 +74,6 @@ def register():
         new_user = User(
             name = user_name,
             password = generate_password_hash(
-
                         user_password,
                         method="pbkdf2:sha256", 
                         salt_length=8
@@ -86,12 +83,12 @@ def register():
         db.session.commit()
 
         access_token = create_access_token(identity=user_name)
-        return jsonify({"access_token": access_token}), 200
+        return jsonify({"access_token": access_token}), 201
 
 @app.route('/login', methods=["POST"])
 def login():
-    user_name = request.args.get("name")
-    password = request.args.get("password")
+    user_name = request.json.get("name")
+    password = request.json.get("password")
 
     with app.app_context():
         check_user = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
@@ -104,7 +101,7 @@ def login():
         
         if check_user and check_password_hash(check_user.password, password):
             access_token = create_access_token(identity=user_name)
-            return jsonify(access_token=access_token), 201
+            return jsonify(access_token=access_token), 200
 
 @app.route('/get-recipes', methods=["GET"])
 def get_recipes():
@@ -132,9 +129,9 @@ def create_recipe():
     
     with app.app_context():
         new_recipe = Recipe(
-            title = request.args.get("title"),
-            description = request.args.get("description"),
-            ingredients = request.args.get("ingredients").split(',') # All Ingredients are converted to a list of ingredients
+            title = request.json.get("title"),
+            description = request.json.get("description"),
+            ingredients = request.json.get("ingredients").split(',') # All Ingredients are converted to a list of ingredients
 
         )
 
@@ -150,9 +147,9 @@ def update_recipe(recipe_id):
     with app.app_context():
         recipe = db.get_or_404(Recipe, recipe_id)
 
-        recipe.title = request.args.get("title", recipe.title)
-        recipe.description = request.args.get("description", recipe.description)
-        recipe.ingredients = request.args.get("ingredients", recipe.ingredients)
+        recipe.title = request.json.get("title", recipe.title)
+        recipe.description = request.json.get("description", recipe.description)
+        recipe.ingredients = request.json.get("ingredients", recipe.ingredients)
 
         db.sesssion.commit()
         return jsonify({"message": "recipe successfully updated"}), 201
@@ -174,7 +171,7 @@ def delete_recipe(recipe_id):
 @jwt_required()
 def user_profile():
 
-    name = request.args.get('name')
+    name = request.json.get('name')
     with app.app_context():
         user = db.session.execute(db.select(User).where(User.name==name)).scalar()
         if user:
