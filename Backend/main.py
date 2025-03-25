@@ -56,37 +56,39 @@ class Recipe(db.Model):
         for column in self.__table__.columns:
             recipes[column.name] = getattr(self, column.name)
         return recipes
+    
+@app.route('/', methods=["GET"])
+def index():
+    return "<h1>Welcome to FlavorVerse</h1>"
 
 @app.route('/register', methods=["POST"])
 def register():
-    user_name = request.args.get("name")
-    user_password = request.args.get("password")
+    user_name = request.json.get("name")
+    user_password = request.json.get("password")
+    check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
 
+    if check_name:
+        return jsonify({"message": "User already exists"}), 400
+   
     with app.app_context():
-        check_name = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
-
-        if check_name:
-            return jsonify({"message": "User already exists"}), 400
-        else:
-            new_user = User(
-                name = user_name,
-                password = generate_password_hash(
+        new_user = User(
+            name = user_name,
+            password = generate_password_hash(
                         user_password,
                         method="pbkdf2:sha256", 
                         salt_length=8
-                    )
-            )
+                        )
+        )
+        db.session.add(new_user)
+        db.session.commit()
 
-            db.session.add(new_user)
-            db.session.commit()
-
-            access_token = create_access_token(identity=user_name)
-            return jsonify({"access_token": access_token})
+        access_token = create_access_token(identity=user_name)
+        return jsonify({"access_token": access_token}), 201
 
 @app.route('/login', methods=["POST"])
 def login():
-    user_name = request.args.get("name")
-    password = request.args.get("password")
+    user_name = request.json.get("name")
+    password = request.json.get("password")
 
     with app.app_context():
         check_user = db.session.execute(db.select(User).where(User.name==user_name)).scalar()
@@ -99,7 +101,7 @@ def login():
         
         if check_user and check_password_hash(check_user.password, password):
             access_token = create_access_token(identity=user_name)
-            return jsonify(access_token=access_token), 201
+            return jsonify(access_token=access_token), 200
 
 @app.route('/get-recipes', methods=["GET"])
 def get_recipes():
@@ -109,7 +111,7 @@ def get_recipes():
         return jsonify({"recipes": [recipe.to_json() for recipe in all_recipes]}), 200
 
 
-@app.route('/get-recipe/<int: recipe_id>', methods=["GET"])
+@app.route('/get-recipe/<int:recipe_id>', methods=["GET"])
 def get_recipe(recipe_id):
     
     with app.app_context():
@@ -127,9 +129,9 @@ def create_recipe():
     
     with app.app_context():
         new_recipe = Recipe(
-            title = request.args.get("title"),
-            description = request.args.get("description"),
-            ingredients = request.args.get("ingredients").split(',') # All Ingredients are converted to a list of ingredients
+            title = request.json.get("title"),
+            description = request.json.get("description"),
+            ingredients = request.json.get("ingredients").split(',') # All Ingredients are converted to a list of ingredients
 
         )
 
@@ -138,23 +140,23 @@ def create_recipe():
 
         return jsonify({"message": "recipe successfully created"}), 201
 
-@app.route('/update-recipe/<int: recipe_id>', methods=["PATCH"])
+@app.route('/update-recipe/<int:recipe_id>', methods=["PATCH"])
 @jwt_required()
 def update_recipe(recipe_id):
 
     with app.app_context():
         recipe = db.get_or_404(Recipe, recipe_id)
 
-        recipe.title = request.args.get("title", recipe.title)
-        recipe.description = request.args.get("description", recipe.description)
-        recipe.ingredients = request.args.get("ingredients", recipe.ingredients)
+        recipe.title = request.json.get("title", recipe.title)
+        recipe.description = request.json.get("description", recipe.description)
+        recipe.ingredients = request.json.get("ingredients", recipe.ingredients)
 
         db.sesssion.commit()
         return jsonify({"message": "recipe successfully updated"}), 201
 
 
 
-@app.route('/delete-recipe/<int: recipe_id>', methods=["DELETE"])
+@app.route('/delete-recipe/<int:recipe_id>', methods=["DELETE"])
 @jwt_required()
 def delete_recipe(recipe_id):
 
@@ -169,7 +171,7 @@ def delete_recipe(recipe_id):
 @jwt_required()
 def user_profile():
 
-    name = request.args.get('name')
+    name = request.json.get('name')
     with app.app_context():
         user = db.session.execute(db.select(User).where(User.name==name)).scalar()
         if user:
@@ -185,4 +187,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         
-    app.run(debug=True)
+    app.run(debug=True, port=5005)

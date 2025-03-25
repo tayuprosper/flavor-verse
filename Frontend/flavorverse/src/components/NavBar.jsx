@@ -2,7 +2,9 @@ import { useState } from "react";
 import ButtonPrimary from "../assets/ButtonPrimary";
 import ButtonSecondary from "../assets/ButtonSecondary";
 
-const NavBar = () => {
+import { getAccessToken } from "../api/auth";
+const NavBar = ()=>{
+    const accessToken = getAccessToken();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -18,23 +20,33 @@ const NavBar = () => {
                 </div>
                 <div className="menu font-bold">
                     <ul className="flex gap-5 text-xl">
-                        <li className="home active text-important hover:text-[#b84A62]">
+                        <li className="home active text-important hover:text-[#b84A62] cursor-pointer">
                             <a href="/">Home</a>
                         </li>
-                        <li className="about hover:text-[#b84A62]">
+                        <li className="about hover:text-[#b84A62] cursor-pointer">
                             <a href="/about">About</a>
                         </li>
-                        <li className="contact hover:text-[#b84A62]">
+                        <li className="contact hover:text-[#b84A62] cursor-pointer">
                             <a href="/contact">Contact</a>
                         </li>
-                        <li className="team hover:text-[#b84A62] transition-all duration-300">
+                        <li className="team hover:text-[#b84A62] transition-all duration-300 cursor-pointer">
                             <a href="/team">Team</a>
                         </li>
                     </ul>
                 </div>
                 <div className="user-avatar flex gap-5">
-                    <ButtonPrimary label="Login" to="/login" />
-                    <ButtonSecondary label="Sign up" />
+                   {
+                    accessToken ? 
+                    
+                       <Link to={"/"}><img src="user-black.svg" alt="" className="cursor-pointer w-15 bg-white rounded-full p-3"/></Link> 
+                    
+                    :
+                <>
+                <Link to={"/login"} ><ButtonPrimary label={"Login"}/></Link>
+                <Link to={"/signup"} ><ButtonSecondary label={"Sign up"}/></Link>
+                </>
+                   
+                }
                 </div>
             </div>
 
@@ -75,10 +87,10 @@ const NavBar = () => {
                 <div className="md:hidden absolute h-[100vh] w-[200px] transition-all duration-300 ease-in-out bg-[#b84A62] flex flex-col p-5">
                     <div className="menu font-bold">
                         <ul className="flex flex-col gap-5 text-xl">
-                            <li className="home active text-white hover:text-[#b84A62]">
+                            <li className="home active text-white hover:text-[#b84A62] cursor-pointer">
                                 <a href="/">Home</a>
                             </li>
-                            <li className="about text-white hover:text-[#b84A62]">
+                            <li className="about text-white hover:text-[#b84A62] cursor-pointer">
                                 <a href="/about">About</a>
                             </li>
                             <li className="contact text-white hover:text-[#b84A62]">
@@ -89,9 +101,19 @@ const NavBar = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className="user-avatar flex flex-col gap-5 mt-5">
-                        <ButtonPrimary label="Login" to="/login" />
-                        <ButtonSecondary label="Sign up" />
+                    <div className="user-avatar flex flex-col gap-5 mt-5 cursor-pointer">
+                        {
+                    accessToken ? 
+                    
+                       <Link to={"/"}><img src="user-black.svg" alt="" className="cursor-pointer w-15 bg-white rounded-full p-3"/></Link> 
+                    
+                    :
+                <>
+                <Link to={"/login"} ><ButtonPrimary label={"Login"}/></Link>
+                <Link to={"/signup"} ><ButtonSecondary label={"Sign up"}/></Link>
+                </>
+                   
+                }
                     </div>
                 </div>
             )}
