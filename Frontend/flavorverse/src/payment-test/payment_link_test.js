@@ -10,7 +10,7 @@ export const generate_payment_link = async ()=>{
         },
 
         body: JSON.stringify({
-            "amount": 5000,
+            "amount": 1000,
             "email": "testemail@gmail.com",
             "message": "test message"
         })

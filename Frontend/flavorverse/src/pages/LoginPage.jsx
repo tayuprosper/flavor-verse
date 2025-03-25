@@ -3,6 +3,7 @@ import ButtonPrimary from "../assets/ButtonPrimary"
 import { validate_form_login_form } from "../FormUtilities/validateform";
 import { useNavigate } from "react-router-dom";
 import { login_user } from "../api/auth";
+import { getAccessToken } from "../api/auth";
 const LoginPage = ()=>{
 
     const navigate = useNavigate();
@@ -19,23 +20,23 @@ const LoginPage = ()=>{
         password: '',
     });
 
-    const [formError, setFromError] = useState('');
+    const [formError, setFormError] = useState('');
 
 
     const handleSubmit = async(e)=>{
         e.preventDefault();
-        if (validate_form_login_form(formData, setFromError)){
-            const res = await login_user(formData.username, formData.password,setFromError);
+        if (validate_form_login_form(formData, setFormError)){
+            const res = await login_user(formData.username, formData.password,setFormError);
             if (!res){
+                setFormError("Invalid username or password")
                 return;
             }else{
                 localStorage.setItem("accessToken", res.access_token)
                 navigate("/");
             }
         }else{
-            alert("Failure");
+           return;
         }
-        alert(formData.username);
     }
 
 

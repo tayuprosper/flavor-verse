@@ -2,7 +2,10 @@ import { useState } from "react";
 import ButtonPrimary from "../assets/ButtonPrimary";
 import ButtonSecondary from "../assets/ButtonSecondary";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 
+=======
+>>>>>>> e3e4ae6a7a572cc4771c950a4660b6b6f08619f0
 import { getAccessToken } from "../api/auth";
 const NavBar = ()=>{
     const accessToken = getAccessToken();
@@ -110,8 +113,8 @@ const NavBar = ()=>{
                     
                     :
                 <>
-                <Link to={"/login"} ><ButtonPrimary label={"Login"}/></Link>
-                <Link to={"/signup"} ><ButtonSecondary label={"Sign up"}/></Link>
+                <Link to={"/login"}><ButtonPrimary label={"Login"}/></Link>
+                <Link to={"/signup"}><ButtonSecondary label={"Sign up"}/></Link>
                 </>
                    
                 }
