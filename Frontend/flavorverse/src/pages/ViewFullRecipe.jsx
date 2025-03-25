@@ -47,7 +47,7 @@ const ViewFullRecipeList = () => {
     };
 
     return (
-        <div className="my-5 mx-5">
+        <div className="my-5 mx-40">
             {/* Search and Header Section */}
             <div className="flex md:flex-row flex-col justify-between">
                 <h1 className="text-2xl font-bold px-5">Discover</h1>
@@ -80,7 +80,7 @@ const ViewFullRecipeList = () => {
 
             {/* Most Popular Section */}
             <div className="my-10">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between ">
                     <h3 className="font-semibold text-xl">Most Popular</h3>
                 </div>
                 <div className="relative overflow-hidden my-5 mx-[5%]">

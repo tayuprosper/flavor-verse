@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "genai": "^0.0.18",
+    "openai": "^4.89.0",
     "react-router-dom": "^7.4.0"
   }
 }

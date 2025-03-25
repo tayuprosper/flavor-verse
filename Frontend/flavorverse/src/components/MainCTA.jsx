@@ -1,11 +1,12 @@
 import ButtonNext from "../assets/ButtonNext";
 import ButtonPrimary from "../assets/ButtonPrimary"
 import { generate_payment_link } from "../payment-test/payment_link_test";
-
+import { fetchaiapi } from "../payment-test/payment_link_test";
 const MainCTA = ()=>{
 
     const startPay = async ()=>{
-        await generate_payment_link();
+            const response = await fetchaiapi();
+            console.log(response);
     }
 
     return (

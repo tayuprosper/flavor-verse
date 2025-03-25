@@ -7,7 +7,7 @@ import { getAccessToken } from "../api/auth";
 const LoginPage = ()=>{
 
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(()=>{
         const token = getAccessToken();
                 if (token){
@@ -26,11 +26,14 @@ const LoginPage = ()=>{
     const handleSubmit = async(e)=>{
         e.preventDefault();
         if (validate_form_login_form(formData, setFormError)){
+            setIsLoading(true)
             const res = await login_user(formData.username, formData.password,setFormError);
             if (!res){
+                setIsLoading(false)
                 setFormError("Invalid username or password")
                 return;
             }else{
+                setIsLoading(false)
                 localStorage.setItem("accessToken", res.access_token)
                 navigate("/");
             }
@@ -76,7 +79,11 @@ const LoginPage = ()=>{
                 {
                     formError && <p className="text-center font-semibold text-important">{formError}</p>
                 }
-                <center><ButtonPrimary label={"Log in"}   onclick={(e)=>handleSubmit(e)}/></center>
+                {
+                    isLoading ?  <center><ButtonPrimary label={"..."}/></center>: 
+                    <center><ButtonPrimary label={"Log in"}   onclick={(e)=>handleSubmit(e)}/></center>
+                }
+                {/* <center><ButtonPrimary label={"Log in"}   onclick={(e)=>handleSubmit(e)}/></center> */}
                 <p className="text-center">New to flavorverse? <span className="font-bold text-important cursor-pointer">Sign up here</span></p>
             </form>
         </div>
