@@ -109,8 +109,8 @@ const NavBar = ()=>{
                     
                     :
                 <>
-                <Link to={"/login"} ><ButtonPrimary label={"Login"}/></Link>
-                <Link to={"/signup"} ><ButtonSecondary label={"Sign up"}/></Link>
+                <Link to={"/login"}><ButtonPrimary label={"Login"}/></Link>
+                <Link to={"/signup"}><ButtonSecondary label={"Sign up"}/></Link>
                 </>
                    
                 }
