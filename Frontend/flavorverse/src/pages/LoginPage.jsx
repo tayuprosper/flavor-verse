@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonPrimary from "../assets/ButtonPrimary"
 import { validate_form_login_form } from "../FormUtilities/validateform";
+import { useNavigate } from "react-router-dom";
+import { login_user } from "../api/auth";
 const LoginPage = ()=>{
 
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        const token = getAccessToken();
+                if (token){
+                    navigate("/");
+                }
+    },[])
 
     const [formData ,setFormData] = useState({
         username: '',
@@ -12,10 +22,16 @@ const LoginPage = ()=>{
     const [formError, setFromError] = useState('');
 
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault();
         if (validate_form_login_form(formData, setFromError)){
-            alert("Success");
+            const res = await login_user(formData.username, formData.password,setFromError);
+            if (!res){
+                return;
+            }else{
+                localStorage.setItem("accessToken", res.access_token)
+                navigate("/");
+            }
         }else{
             alert("Failure");
         }

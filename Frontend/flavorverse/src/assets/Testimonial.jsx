@@ -1,13 +1,9 @@
 const Testimonial = ({ img_link, info }) => {
     return (
-        <div className="testimonial-card bg-white p-5 rounded-lg shadow-xl">
-            <div className="testimonial-text mb-5 text-lg">
-                <p>
-                    "Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Mollitia libero inventore
-                    adipisci, dignissimos provident cupiditate dicta
-                    natus quis consequatur iusto minima hic ea distinctio 
-                    animi ipsum a perferendis labore sequi impedit rerum!"
+        <div className="testimonial-card bg-white  p-5 rounded-lg md:my-0 my-5 md:mx-0 mx-10 shadow-xl">
+            <div className="testimonial-text mb-5 md:text-lg">
+                <p className="text-sm">
+                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil necessitatibus quod saepe, nam reprehenderit porro, quibusdam explicabo suscipit earum alias illo esse, accusantium ducimus eum? Architecto eius distinctio adipisci non!
                 </p>
             </div>
             <div className="profile-info flex items-center gap-4">
