@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
-const ButtonSecondary = ({ to, label })=>{
+const ButtonSecondary = ({ label, onclick })=>{
     return (
-        <Link to={to} className="border-2 md:text-[#B84A62] text-white transition-all duration-300    border-white font-bold p-2 hover:shadow-md text-center rounded-sm text">
+        <button className="border-2 md:text-[#B84A62] text-white transition-all duration-300    border-white font-bold p-2 hover:shadow-md text-center rounded-sm text" onClick={onclick}>
           { label }
-        </Link>
+        </button>
     )
 }
 
