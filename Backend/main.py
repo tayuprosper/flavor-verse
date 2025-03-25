@@ -8,10 +8,13 @@ from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from typing import List
-
+import requests
 
 app = Flask(__name__)
 CORS(app)
+
+fapshi_sandbox_url = "https://sandbox.fapshi.com"
+
 # Setup database
 
 class Base(DeclarativeBase):
@@ -84,7 +87,7 @@ def register():
         db.session.commit()
 
         access_token = create_access_token(identity=user_name)
-        return jsonify({"access_token": access_token}), 200
+        return jsonify({"access_token": access_token}), 201
 
 @app.route('/login', methods=["POST"])
 def login():
